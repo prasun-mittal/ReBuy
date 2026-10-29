@@ -25,6 +25,9 @@ Backend
 - CORS
 Project Structure
 
+## Project Structure
+
+```text
 ReBuy/
 ├── backend/
 │   ├── middleware/
@@ -51,6 +54,7 @@ ReBuy/
 │   └── package.json
 ├── .gitignore
 └── README.md
+```
 Prerequisites
 Install the following before running the project:
 - Node.js (includes npm)
