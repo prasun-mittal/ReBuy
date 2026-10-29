@@ -1,122 +1,97 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/products"
+        );
+
+        setProducts(res.data);
+      } catch (err) {
+        setError("Unable to load products. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getProducts();
+  }, []);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+    <div className="min-h-screen bg-gray-100">
+      <nav className="bg-white shadow p-4">
+        <h1 className="text-2xl font-bold text-green-700">
+          ReBuy
+        </h1>
+        <p className="text-gray-600">
+          Buy smart. Sell what you don't need.
+        </p>
+      </nav>
+
+      <main className="max-w-6xl mx-auto p-6">
+        <h2 className="text-2xl font-bold mb-6">
+          Available Products
+        </h2>
+
+        {loading && <p>Loading products...</p>}
+
+        {error && <p className="text-red-600">{error}</p>}
+
+        {!loading && !error && products.length === 0 && (
+          <p className="text-gray-600">
+            No products available yet. Check back soon!
           </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+        )}
 
-      <div className="ticks"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {products.map((product) => (
+            <div
+              key={product._id}
+              className="bg-white rounded-xl shadow p-4"
+            >
+              {product.imageUrl && (
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="w-full h-48 object-cover rounded-lg mb-3"
+                />
+              )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+              <h3 className="text-lg font-semibold">
+                {product.name}
+              </h3>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+              <p className="text-gray-600 mt-1">
+                {product.description}
+              </p>
+
+              <p className="text-green-700 font-bold mt-3">
+                ₹{product.price.toLocaleString("en-IN")}
+              </p>
+
+              <p className="text-sm text-gray-500 mt-1">
+                {product.category} · {product.condition}
+              </p>
+
+              {product.location && (
+                <p className="text-sm text-gray-500">
+                  Location: {product.location}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
+  );
 }
 
-export default App
+export default App;
