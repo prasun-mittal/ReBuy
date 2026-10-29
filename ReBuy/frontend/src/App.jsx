@@ -2,6 +2,7 @@
 import { BrowserRouter, Routes, Route, NavLink, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import SellProduct from "./pages/SellProduct";
+import ProductDetails from "./pages/ProductDetails";
 
 function App() {
   return (
@@ -54,6 +55,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/sell" element={<SellProduct />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+
           <Route
             path="*"
             element={
