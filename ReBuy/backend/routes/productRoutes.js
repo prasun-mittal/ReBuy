@@ -29,13 +29,29 @@ router.post("/", async (req, res) => {
       imageUrl,
     } = req.body;
 
+    // 1. Validate price
+    const numericPrice = Number(price);
+
     if (
-      !name?.trim() ||
-      !description?.trim() ||
       price === undefined ||
       price === null ||
       price === "" ||
-      !category?.trim() ||
+      !Number.isFinite(numericPrice) ||
+      numericPrice < 0
+    ) {
+      return res.status(400).json({
+        message: "Price must be a valid non-negative number",
+      });
+    }
+
+    // 2. Validate required fields
+    if (
+      typeof name !== "string" ||
+      !name.trim() ||
+      typeof description !== "string" ||
+      !description.trim() ||
+      typeof category !== "string" ||
+      !category.trim() ||
       !condition
     ) {
       return res.status(400).json({
@@ -43,22 +59,30 @@ router.post("/", async (req, res) => {
       });
     }
 
+    // 3. Create product in MongoDB
     const product = await Product.create({
-      name,
-      description,
-      price,
-      category,
+      name: name.trim(),
+      description: description.trim(),
+      price: numericPrice,
+      category: category.trim(),
       condition,
       location,
       imageUrl,
     });
 
+    // 4. Send success response
     res.status(201).json({
       message: "Product added successfully",
       product,
     });
+
   } catch (error) {
-    if (error.name === "ValidationError" || error.name === "CastError") {
+    console.error("Create product error:", error.message);
+
+    if (
+      error.name === "ValidationError" ||
+      error.name === "CastError"
+    ) {
       return res.status(400).json({
         message: "Invalid product data",
       });

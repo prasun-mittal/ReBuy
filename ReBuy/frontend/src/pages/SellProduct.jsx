@@ -23,9 +23,20 @@ function SellProduct() {
   const navigate = useNavigate();
 
   const updateForm = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
+        const { name, value } = e.target;
+
+        // Allow only digits and one decimal point in price
+        if (name === "price") {
+          if (!/^\d*\.?\d*$/.test(value)) {
+            return;
+          }
+        }
+
+        setForm((prev) => ({
+          ...prev,
+          [name]: value,
+        }));
+      };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
