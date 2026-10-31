@@ -74,17 +74,63 @@ function App() {
           />
         </Routes>
 
-        <footer className="mt-16 border-t border-gray-200 bg-white">
-          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-7 text-sm text-gray-500 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-            <p className="font-semibold text-gray-800">
-              Re<span className="text-green-700">Buy</span>
-              <span className="ml-2 font-normal text-gray-500">
+        
+    <footer className="mt-16 border-t border-gray-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+
+          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+
+            {/* Brand */}
+            <div>
+              <Link to="/" className="text-2xl font-extrabold text-gray-900">
+                Re<span className="text-green-700">Buy</span>
+              </Link>
+              <p className="mt-4 text-sm leading-6 text-gray-500">
                 Buy smart. Give things a second life.
-              </span>
-            </p>
-            <p>Discover pre-loved products, make smarter choices.</p>
+                Discover pre-loved products and make
+                sustainable shopping choices.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h3 className="font-bold text-gray-900">Quick Links</h3>
+              <ul className="mt-4 space-y-3 text-sm text-gray-500">
+                <li><Link to="/" className="hover:text-green-700">Explore Products</Link></li>
+                <li><Link to="/sell" className="hover:text-green-700">Sell an Item</Link></li>
+                <li><a href="/#how-it-works" className="hover:text-green-700">How It Works</a></li>
+              </ul>
+            </div>
+
+            {/* Support */}
+            <div>
+              <h3 className="font-bold text-gray-900">Support</h3>
+              <ul className="mt-4 space-y-3 text-sm text-gray-500">
+                <li><a href="mailto:support@rebuy.com" className="hover:text-green-700">Contact Us</a></li>
+                <li><a href="mailto:support@rebuy.com" className="hover:text-green-700">Help & Support</a></li>
+              </ul>
+            </div>
+
+            {/* About */}
+            <div>
+              <h3 className="font-bold text-gray-900">Our Mission</h3>
+              <p className="mt-4 text-sm leading-6 text-gray-500">
+                We believe every product deserves a second chance.
+                ReBuy encourages reuse, reduces waste, and makes
+                affordable shopping easier.
+              </p>
+            </div>
+
           </div>
-        </footer>
+
+          <div className="mt-10 border-t border-gray-200 pt-6 text-center text-sm text-gray-500">
+            © {new Date().getFullYear()} ReBuy. All rights reserved.
+            <p className="mt-2">Made with care for a sustainable future.</p>
+          </div>
+
+        </div>
+      </footer>
+
       </div>
     </BrowserRouter>
   );
