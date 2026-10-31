@@ -26,10 +26,8 @@ function SellProduct() {
         const { name, value } = e.target;
 
         // Allow only digits and one decimal point in price
-        if (name === "price") {
-          if (!/^\d*\.?\d*$/.test(value)) {
-            return;
-          }
+        if (name === "price" && !/^\d*\.?\d*$/.test(value)) {
+          return;
         }
 
         setForm((prev) => ({
@@ -53,8 +51,7 @@ function SellProduct() {
       return;
     }
 
-    if (form.price.trim() === "" || !Number.isFinite(Number(form.price)) ||
-        Number(form.price) < 0) {
+    if (form.price.trim() === "" || !/^\d+(\.\d+)?$/.test(form.price) || !Number.isFinite(Number(form.price)) || Number(form.price) < 0) {
       setError("Please enter a valid, non-negative price.");
       return;
     }
@@ -219,9 +216,8 @@ function SellProduct() {
                     <input
                       id="price"
                       name="price"
-                      type="number"
-                      min="0"
-                      step="0.01"
+                      type="text"
+                      inputMode="decimal"
                       value={form.price}
                       onChange={updateForm}
                       placeholder="2500"
