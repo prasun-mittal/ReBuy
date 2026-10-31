@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 const productRoutes = require("./routes/productRoutes");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use("/api/products", productRoutes);
 app.get("/", (req, res) => {
   res.send("ReBuy backend is running!");
 });
+
+app.use("/api/auth", authRoutes);
 
 // Connect to MongoDB and start server
 mongoose
