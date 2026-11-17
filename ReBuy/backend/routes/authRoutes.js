@@ -6,14 +6,15 @@ const User = require("../models/User");
 
 const router = express.Router();
 
-// Register
+// REGISTER
 router.post("/register", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, phone, address } = req.body;
 
+    // Check required fields
     if (!name || !email || !password) {
       return res.status(400).json({
-        message: "All fields are required",
+        message: "Name, email and password are required",
       });
     }
 
@@ -23,8 +24,11 @@ router.post("/register", async (req, res) => {
       });
     }
 
+    const normalizedEmail = email.trim().toLowerCase();
+
+    // Check existing user
     const existingUser = await User.findOne({
-      email: email.toLowerCase().trim(),
+      email: normalizedEmail,
     });
 
     if (existingUser) {
@@ -33,12 +37,16 @@ router.post("/register", async (req, res) => {
       });
     }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Create user
     const user = await User.create({
-      name,
-      email,
+      name: name.trim(),
+      email: normalizedEmail,
       password: hashedPassword,
+      phone: phone || "",
+      address: address || "",
     });
 
     res.status(201).json({
@@ -47,16 +55,23 @@ router.post("/register", async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
+        address: user.address,
+        role: user.role,
       },
     });
+
   } catch (error) {
+    console.error("Registration error:", error.message);
+
     res.status(500).json({
       message: "Registration failed",
     });
   }
 });
 
-// Login
+
+// LOGIN
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -67,8 +82,10 @@ router.post("/login", async (req, res) => {
       });
     }
 
+    const normalizedEmail = email.trim().toLowerCase();
+
     const user = await User.findOne({
-      email: email.toLowerCase().trim(),
+      email: normalizedEmail,
     });
 
     if (!user) {
@@ -77,7 +94,11 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    // Compare password
+    const isMatch = await bcrypt.compare(
+      password,
+      user.password
+    );
 
     if (!isMatch) {
       return res.status(401).json({
@@ -85,6 +106,7 @@ router.post("/login", async (req, res) => {
       });
     }
 
+    // Generate JWT token
     const token = jwt.sign(
       { id: user._id },
       process.env.JWT_SECRET,
@@ -98,9 +120,15 @@ router.post("/login", async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
+        address: user.address,
+        role: user.role,
       },
     });
+
   } catch (error) {
+    console.error("Login error:", error.message);
+
     res.status(500).json({
       message: "Login failed",
     });
