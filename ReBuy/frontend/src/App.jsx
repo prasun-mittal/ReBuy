@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, NavLink, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import SellProduct from "./pages/SellProduct";
 import ProductDetails from "./pages/ProductDetails";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -41,14 +43,29 @@ function App() {
                 How it works
               </a>
             </div>
+            <div className="flex shrink-0 items-center gap-3">
+              <NavLink
+                to="/login"
+                className="text-sm font-semibold text-gray-600 transition hover:text-green-700"
+              >
+                Login
+              </NavLink>
 
-            <NavLink
-              to="/sell"
-              className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-green-700 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-green-800 hover:shadow-md sm:px-5"
-            >
-              <span className="text-lg leading-none">+</span>
-              <span>Sell an item</span>
-            </NavLink>
+              <NavLink
+                to="/register"
+                className="rounded-xl border border-green-700 px-4 py-2.5 text-sm font-bold text-green-700 transition hover:bg-green-50"
+              >
+                Register
+              </NavLink>
+
+              <NavLink
+                to="/sell"
+                className="inline-flex items-center gap-2 rounded-xl bg-green-700 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-green-800 sm:px-5"
+              >
+                <span className="text-lg leading-none">+</span>
+                <span>Sell an item</span>
+              </NavLink>
+            </div>
           </nav>
         </header>
 
@@ -56,7 +73,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/sell" element={<SellProduct />} />
           <Route path="/product/:id" element={<ProductDetails />} />
-
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route
             path="*"
             element={
